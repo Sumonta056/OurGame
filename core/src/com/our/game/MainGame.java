@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainGame extends ApplicationAdapter {
+	public static final int SCREEN_WIDTH = 1700;
+	public static final int SCREEN_HEIGHT = 950;
+
 	SpriteBatch batch;
 	Texture img;
 	
