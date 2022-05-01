@@ -1,6 +1,6 @@
 package com.our.game;
 
-import Screen.HomeScreen;
+import screen.HomeScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

@@ -1,21 +1,21 @@
-package Screen;
+package screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.our.game.MainGame;
+import gameObjects.Character;
 
-public class HomeScreen implements Screen {
+public class GameScreen implements Screen {
 
     MainGame game;
 
-    public HomeScreen(MainGame game) {
+    Character character; // character object
 
+    public GameScreen(MainGame game) {
         this.game = game;
-    }
 
+        character = new Character(); // creating character object
+    }
 
     @Override
     public void show() {
@@ -24,16 +24,18 @@ public class HomeScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(1, 1, 1, 1);
 
-        ScreenUtils.clear(0, 0, 1, 1);
+        character.update(); // updating character object
 
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
-        {
-            this.dispose();
-            //game.setScreen(new MainMenuScreen(game));
-            game.setScreen(new GameScreen(game));
-        }
 
+        game.batch.begin(); // beginning of SpriteBatch
+
+
+        character.render(game.batch); // rendering character
+
+
+        game.batch.end(); // ending of SpriteBatch
     }
 
     @Override

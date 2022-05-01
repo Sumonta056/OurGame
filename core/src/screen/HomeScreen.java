@@ -1,17 +1,20 @@
-package Screen;
+package screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.our.game.MainGame;
 
-public class GameScreen implements Screen {
+public class HomeScreen implements Screen {
 
     MainGame game;
 
-    public GameScreen(MainGame game) {
+    public HomeScreen(MainGame game) {
 
         this.game = game;
     }
+
 
     @Override
     public void show() {
@@ -20,8 +23,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
         ScreenUtils.clear(0, 0, 1, 1);
-        ScreenUtils.clear(1, 1, 1, 1);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
+        {
+            this.dispose();
+            //game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new GameScreen(game));
+        }
 
     }
 
