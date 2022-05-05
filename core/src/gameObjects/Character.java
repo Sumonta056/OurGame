@@ -69,16 +69,128 @@ public class Character implements ForObject {
     default constructor
      */
     public Character () {
+        // creating run animation
         createRunAnimation();
+
+        // creating fly animation
+        createFlyAnimation();
+
+        // creating jump animation
+        createJumpAnimation();
     }
 
+    /*
+    this method is used to update character position and different characteristics.
+    */
     @Override
     public void update() {
+        // setting character position (in air or water)
+        setCharacterPosition();
+
+        // setting character movement in air
+        setCharacterAirMovement();
+
+        // setting character bound (not exceeding water or air)
+        setCharacterBound();
     }
 
+    /*
+    this method is used to render the character from desired class.
+     */
     @Override
     public void render(SpriteBatch batch) {
-        renderRunAnimation(batch);
+        /*
+        the conditions below check which action to perform.
+         */
+        if (jumpDelay) {
+            // if the jumpDelay is true the condition will be executed. and it will continue jumping until
+            // character touches the ground and jumpDelay becomes false.
+
+            renderJumpAnimation(batch); // drawing jump animation
+        }
+        else {
+            if (characterY == 0 && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                // it will jump now
+
+                jumpDirection = 0; // 0 means going upward. 1 means going downward.
+                jumpStateTime = 0f; // used to calculate how long the character is jumping. initially 0
+                jumpDelay = true; // true means until it finishes jump other actions will be frozen.
+                renderJumpAnimation(batch); // drawing jump animation
+            }
+            else if (characterY == 0) {
+                // if the character y-axis is 0, by default it will start running.
+
+                renderRunAnimation(batch); // drawing run animation.
+            }
+            else if (characterY >= airMinHeight) {
+                // if the character is in air, it will start flying.
+
+                renderFlyAnimation(batch); // drawing fly animation.
+            }
+        }
+    }
+
+    /*
+    the method will get user input and will teleport character in water or air according to command.
+     */
+    public void setCharacterPosition() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D) && !jumpDelay) {
+            // if this condition is true the character will be teleported into water. if the character is already
+            // in water or performing jump, it will not do anything.
+
+            inWater = true; // it is in water.
+            inAir = false; // leaving air
+            characterY = waterMinHeight; // setting character y-axis at the lowest point of water.
+            characterWidth = characterWaterWidth; // setting character width as the width should be in water.
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.A) && !jumpDelay && !inAir) {
+            // if this condition is true the character will be teleported into air. if the character is already
+            // in air or performing jump, it will not do anything.
+
+            inAir = true; // it is in air.
+            inWater = false; // leaving water.
+            characterY = airMinHeight; // // setting character y-axis at the lowest point of air.
+            characterWidth = characterAirWidth; // setting character width as the width should be in air.
+        }
+    }
+
+    /*
+    this method is used get user input. and do action according to command. it will shift the character up or down
+    according to command.
+     */
+    public void setCharacterAirMovement() {
+        if (!inAir) return; // if the character is not in the air it will not do action. so it returned.
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            // will shift the character upward.
+
+            characterY += characterFlySpeed * Gdx.graphics.getDeltaTime(); // changing y-axis
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            // will shift the character downward.
+
+            characterY -= characterFlySpeed * Gdx.graphics.getDeltaTime(); // changing y-axis
+        }
+    }
+
+    /*
+    this method is used to make sure the character is within its range both in air and water.
+     */
+    public void setCharacterBound() {
+        if (inWater) {
+            // checking if the character is exceeded its limit in water.
+
+            if (characterY <= waterMinHeight) characterY = waterMinHeight;
+            else if (characterY >= waterMaxHeight - safeDistanceFromAir) characterY = waterMaxHeight - safeDistanceFromAir;
+        }
+        else if (inAir) {
+            // checking if the character is exceeding its limit in air.
+
+            if (characterY <= airMinHeight + safeDistanceFromWater) {
+                characterY = airMinHeight + safeDistanceFromWater;
+            }
+            else if (characterY >= airMaxHeight) characterY = airMaxHeight;
+        }
     }
 
     /*
