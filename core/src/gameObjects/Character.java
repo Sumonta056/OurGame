@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import extra.Collision;
 
 public class Character implements ForObject {
-    //Collision collision; // for tracking collision of character with other objects
+    Collision collision; // for tracking collision of character with other objects
 
     // character variables starts
     public float characterX = 50; // x-axis of character
@@ -69,6 +70,9 @@ public class Character implements ForObject {
     default constructor
      */
     public Character () {
+        collision = new Collision(characterX, characterY, characterWidth, characterHeight); // creating object of
+        // collision class to check for collision with objects.
+
         // creating run animation
         createRunAnimation();
 
@@ -92,6 +96,9 @@ public class Character implements ForObject {
 
         // setting character bound (not exceeding water or air)
         setCharacterBound();
+
+        // updating collision
+        collision.update(characterX, characterY, characterWidth, characterHeight);
     }
 
     /*
@@ -128,6 +135,11 @@ public class Character implements ForObject {
                 renderFlyAnimation(batch); // drawing fly animation.
             }
         }
+    }
+
+    @Override
+    public Collision getCollision() {
+        return collision;
     }
 
     /*
