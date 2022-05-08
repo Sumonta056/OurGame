@@ -24,18 +24,51 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        updateObjects();
+
+        detectCollision();
+
+
+        game.batch.begin();
+
+        renderObjects();
+
+        game.batch.end();
+    }
+
+    /*
+    this method will be used to update all objects
+     */
+    public void updateObjects() {
+        updateCharacter();
+    }
+
+    public void updateCharacter() {
+        character.update();
+    }
+
+    /*
+    this method will be used to detect all kind of collision
+     */
+    public void detectCollision() {
+
+    }
+
+    /*
+    this method will be used to draw all object on screen
+     */
+    public void renderObjects() {
+        renderBackground();
+
+        renderCharacter();
+    }
+
+    public void renderBackground() {
         ScreenUtils.clear(1, 1, 1, 1);
+    }
 
-        character.update(); // updating character object
-
-
-        game.batch.begin(); // beginning of SpriteBatch
-
-
-        character.render(game.batch); // rendering character
-
-
-        game.batch.end(); // ending of SpriteBatch
+    public void renderCharacter() {
+        character.render(game.batch);
     }
 
     @Override
