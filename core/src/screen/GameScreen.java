@@ -91,6 +91,22 @@ public class GameScreen implements Screen {
      */
     public void detectCollision() {
 
+        characterWithMonsterCollision(); // to detect if there is a collision of character with monster
+    }
+
+    /*
+    for detecting collision of character with monsters
+     */
+    public void characterWithMonsterCollision() {
+        ArrayList<Monster> monsterToRemove = new ArrayList<>(); // to store the objects of Monster which to remove.
+        for (Monster monster : monsters) {
+            if (character.getCollision().isCollide(monster.getCollision())) {
+                // checking if there is a collision
+
+                monsterToRemove.add(monster); // monster should be removed
+            }
+        }
+        monsters.removeAll(monsterToRemove); // removing the monsters which collide with the character.
     }
 
     /*
